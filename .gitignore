@@ -1,0 +1,44 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Meshes
+*.glb
+*.gltf
+*.obj
+*.ply
+*.stl
+*.blend
+render/meshes*/
+
+# Generated data
+Original/
+# On Windows, Mooney/ is the same folder as the mooney/ tool folder, so ignore only the outputs.
+/Mooney/*.png
+/Mooney/mooney_log.csv
+GT/
+Subset/
+Result1/
+Result2/
+Result3/
+Result4/
+preview*/
+slides_assets/
+*.npy
+metadata.csv
+*_sheet.png
+
+# Submission archive and course material
+*.zip
+*.pdf
+*.pptx
