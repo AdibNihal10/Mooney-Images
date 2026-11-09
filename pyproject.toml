@@ -7,4 +7,5 @@ dependencies = []
 [dependency-groups]
 dev = [
     "fake-bpy-module>=20261031",
+    "objaverse>=0.1.7",
 ]

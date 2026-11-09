@@ -1,62 +1,35 @@
 import bpy 
 from mathutils import Vector
+from pathlib import Path
+import objaverse
 
-# bpy.ops.mesh.primitive_cube_add(
-#     size=2,
-#     location=(0,0,0), # where do we want to position our 3D object
-# )
+def models_already_downloaded():
+    model_dir = Path("/models/") # mounted path for the container its different then the project 
+    model_files = list(model_dir.glob("*.glb"))
+    return len(model_files) == 20
 
-# # adding lights
-# bpy.ops.object.light_add(type='POINT', location=light_positions[0])
-# # putting the camera at the position 
-# bpy.ops.object.camera_add(location=(0,-8,5))
-# # facing the camera towards the object before capturing 
-# ## first getting the camera
-# camera = bpy.context.object
-# ## target = cube position
-# target = Vector((0,0,0))
-# direction = target - camera.location
-# ##rotate the camera in that direction
-# camera.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
-
-# bpy.context.scene.camera = camera
-# bpy.context.scene.render.filepath = "/output/test.png"
-# bpy.ops.render.render(write_still=True)
-
-def create_five_images (bpy, light_positions):
-    # will use the 20 objects and then loop them each over the different lighting positions
-    return ""
-
-def pick_twenty_objects():
-    # will return array of list of 20 objects
-    return ""
-
-# adding light positions leaving bottom
-light_positions = [
-    (-5, 0, 5),
-    (5, 0, 5),
-    (0, -5, 5),
-    (0, 5, 5),
-    (0, 0, 8)
-]
-
-def instantiate_twenty_objects():
+def download_models():
+    objaverse.
     pass
 
-def render_images(list_of_objects, bpy):
+def setup_camera():
+    pass
+
+def import_model():
+    pass
+
+def render_five_images():
     pass
 
 def main():
-    # instantiate the bpy camera object just the camerea not the object itself
-    bpy.ops.object.camera_add(location=(0,-8,5))
-    # define the lighting positions (done already above)
+    # download the objects that needs to be modelled through Objaverse 
+    # do check if we already have them
+    if not models_already_downloaded():
+        models = download_models()
+    setup_camera()
+    import_model()
+    render_five_images()
 
-    # call a function to get a bpy  list of object (20) like 3d figure positioned at 0,0,0
-    list_of_objects = instantiate_twenty_objects()
-    # pass the object the camera and the lighting function to a function create_five_images click the images
-        # once one object has been clicked 5 times we need to clear bpy state within the loop
-    render_images(list_of_objects, bpy)
-    # store the images on local mounted folder
     return None
 
 if __name__ == "__main__":
