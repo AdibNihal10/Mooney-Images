@@ -13,13 +13,7 @@ Thumbs.db
 desktop.ini
 
 # Meshes
-*.glb
-*.gltf
-*.obj
-*.ply
-*.stl
-*.blend
-render/meshes*/
+data/*
 
 # Generated data
 Original/
