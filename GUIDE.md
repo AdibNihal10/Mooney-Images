@@ -6,7 +6,7 @@ Our plan: **20 everyday objects × 5 light directions = 100 renders** → 100 Mo
 ```
 compvp_part1/
 ├── render/   download_objects.py, render_objects.py   (Task 1)
-├── mooney/   mooney_tool.py, mooney_gui.py             (Task 2)
+├── mooney_generator/   mooney_tool.py, mooney_gui.py   (Task 2)
 ├── tools/    contact_sheet.py                          (previews + slides)
 ├── vision/   (Task 3 scripts, coming next)
 │
@@ -68,7 +68,7 @@ What it does: each object is centred and scaled the same way. The camera is fixe
 
 **2a. Tune the settings in the GUI.** Take your tool screenshot here too:
 ```bash
-cd ../mooney
+cd ../mooney_generator
 python mooney_gui.py
 ```
 Load a few renders from `Original/` and tick "Count white % on object only". Good starting values are **sigma 2–4** and **white 25–35%**. Find settings where the object is recognizable but tricky.

@@ -23,9 +23,10 @@ render/meshes*/
 
 # Generated data
 Original/
-# On Windows, Mooney/ is the same folder as the mooney/ tool folder, so ignore only the outputs.
-/Mooney/*.png
-/Mooney/mooney_log.csv
+# Mooney outputs (the generator code lives in mooney_generator/)
+/Mooney/
+# Test output of the Mooney GUI's batch tab
+/Mooney_test/
 GT/
 Subset/
 Result1/
