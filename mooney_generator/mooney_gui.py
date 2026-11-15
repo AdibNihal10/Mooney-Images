@@ -10,15 +10,49 @@ Tab 2 "Batch":        point it at a folder (e.g. Original/) and convert all
                       images with the chosen settings into another folder.
 
 All image processing lives in mooney_tool.py; this file is only the interface.
+
+Relative folder names in the Batch tab are resolved against the PROJECT ROOT
+(the parent of mooney_generator/), not the folder the GUI was started from.
+The batch tab never overwrites the real Mooney/ folder with different images:
+it refuses and shows a warning instead (regenerate Mooney/ with mooney_tool.py).
 """
 
 import argparse
+import os
+from pathlib import Path
 
 import cv2
 import gradio as gr
 import numpy as np
 
-from mooney_tool import make_mooney, process, to_gray_and_mask
+from mooney_tool import list_images, load_gray_and_mask, make_mooney, process, to_gray_and_mask
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROTECTED_DIR = PROJECT_ROOT / "Mooney"
+
+
+def resolve_dir(folder):
+    """Absolute paths stay as they are; relative ones are taken from the project root."""
+    p = Path(str(folder).strip()).expanduser()
+    return (p if p.is_absolute() else PROJECT_ROOT / p).resolve()
+
+
+def same_dir(a, b):
+    """Path comparison that ignores case on Windows (Mooney == mooney there)."""
+    return os.path.normcase(str(Path(a).resolve())) == os.path.normcase(str(Path(b).resolve()))
+
+
+def compare_with_existing(in_dir, out_dir, sigma, white_pct, use_alpha, ksize):
+    """Generate every Mooney in memory and compare it with the file already in out_dir.
+    Returns a list of output names that are missing or different."""
+    changed = []
+    for f in list_images(in_dir):
+        gray, mask = load_gray_and_mask(f)
+        mooney, *_ = make_mooney(gray, sigma, white_pct, mask if use_alpha else None, ksize)
+        existing = cv2.imread(str(out_dir / (f.stem + ".png")), cv2.IMREAD_GRAYSCALE)
+        if existing is None or existing.shape != mooney.shape or not np.array_equal(existing, mooney):
+            changed.append(f.stem + ".png")
+    return changed
 
 
 def preview(image_rgba, sigma, white_pct, use_alpha, paper_kernel):
@@ -39,13 +73,29 @@ def preview(image_rgba, sigma, white_pct, use_alpha, paper_kernel):
 
 
 def run_batch(in_dir, out_dir, sigma, white_pct, use_alpha, paper_kernel):
+    ksize = 7 if paper_kernel else None
     try:
-        rows = process(in_dir, out_dir, sigma, white_pct, use_alpha,
-                       7 if paper_kernel else None, verbose=False)
+        src, dst = resolve_dir(in_dir), resolve_dir(out_dir)
+        if not src.exists():
+            return f"Error: input folder not found: `{src}`", []
+        if same_dir(dst, PROTECTED_DIR):
+            changed = compare_with_existing(src, dst, sigma, white_pct, use_alpha, ksize)
+            if changed:
+                return (f"⚠️ **Refused: nothing was written.** `{dst}` holds the agreed Mooney set, and "
+                        f"{len(changed)} of {len(list_images(src))} images would change with these settings "
+                        f"(first: {changed[0]}). Use another output folder, e.g. `Mooney_test`. "
+                        "To regenerate the real set on purpose, use `mooney_tool.py` from the command line."), []
+            rows = [[f.name, f.stem + ".png"] for f in list_images(src)]
+            msg = (f"`{dst}` already matches these settings exactly ({len(rows)} images), "
+                   "so nothing was written.")
+        else:
+            rows = process(src, dst, sigma, white_pct, use_alpha, ksize, verbose=False)
+            msg = f"Converted {len(rows)} images -> `{dst}` (log: `{dst / 'mooney_log.csv'}`)"
     except (SystemExit, Exception) as e:   # show errors in the UI instead of crashing
         return f"Error: {e}", []
-    gallery = [f"{out_dir}/{r[1]}" for r in rows[:24]]
-    return f"Converted {len(rows)} images -> {out_dir}/ (log: {out_dir}/mooney_log.csv)", gallery
+    # images as arrays, so Gradio can show them wherever the folder is
+    gallery = [(cv2.imread(str(dst / r[1]), cv2.IMREAD_GRAYSCALE), r[1]) for r in rows[:24]]
+    return msg, gallery
 
 
 def build_app():
@@ -72,8 +122,10 @@ def build_app():
 
         with gr.Tab("Batch"):
             with gr.Row():
-                in_dir = gr.Textbox(value="Original", label="Input folder")
-                out_dir = gr.Textbox(value="Mooney", label="Output folder")
+                in_dir = gr.Textbox(value="Original", label="Input folder (relative = from project root)")
+                out_dir = gr.Textbox(value="Mooney_test", label="Output folder (relative = from project root)")
+            gr.Markdown(f"Project root: `{PROJECT_ROOT}`. The real `Mooney/` folder is protected: "
+                        "a batch into it is refused if any image would change.")
             btn = gr.Button("Convert all images", variant="primary")
             status = gr.Markdown()
             gallery = gr.Gallery(label="First results", columns=6, height="auto")
