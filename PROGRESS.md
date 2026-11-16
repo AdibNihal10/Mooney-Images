@@ -1,6 +1,6 @@
 # CompVP Part 1: progress
 
-Last updated: 12 Nov 2026, 20:30
+Last updated: 16 Nov 2026, evening
 Deadline: 20 Nov; upload to StudOn at the university by 18-19 Nov.
 
 ## Done
@@ -249,3 +249,58 @@ memory gets critical. Close Chrome, Discord and WhatsApp before any heavy local 
   and the team name are still missing.
 - Still not committed: the `mooney_generator` rename, the doc edits and `colab_vision.ipynb`.
 - **Not run on Colab yet.**
+
+## Update 16 Nov 2026 (ready for Colab)
+- `colab_upload.zip` re-checked: 41.6 MB, contents unchanged. All 6 `vision/*.py` are byte-identical to the
+  repo, and no file in `Original/`, `Mooney/` or `GT/` is newer than the zip, so there was no need to rebuild it.
+- `colab_vision.ipynb`: all 11 requested steps were already there. Three small fixes make a reconnect easier:
+  - Steps 7, 9 and 10 now `%cd /content/project/vision` themselves, and steps 9 and 10 import `Path` and `time` themselves, so
+    after a reconnect they no longer depend on an earlier cell having run.
+  - At the end of step 7, `Result2/` is backed up to `MyDrive/compvp_backup/`. Step 10 does the same for `Result4/`. A
+    disconnect wipes `/content`, so this keeps the finished Marigold outputs if Colab drops during Qwen.
+- Git: everything up to commit `4467ca6` is committed and pushed (`main` = `origin/main`). This notebook fix and the PROGRESS
+  edit are not committed yet.
+- Still missing: `Subset/` (the team's top 10; `summarize_results.py` skips the picture panels without it) and the team name.
+- **Not run on Colab yet.**
+
+### After Colab
+1. Download `results_colab.zip` from My Drive. Unzip it into the project root, so that you get `compvp_part1\Result2\` and
+   `compvp_part1\Result4\` (not `Result2\Result2\`). Replace the old 1-image `Result2\` when asked.
+2. Check: `Result2\Original` and `Result2\Mooney` have 100 .npy + 100 .png each, `Result4\Original` and `Result4\Mooney` have 100 .txt each, and both have a `metrics.csv`.
+3. From `vision\` in the venv: `python summarize_results.py`. Check `Result4\metrics.csv` by hand.
+4. Write the Colab times (from the "Total: ... min" lines) into the results table.
+
+## Update 16 Nov 2026, evening (Colab results in, summary done)
+- `results_colab.zip` was unzipped into the project root. Checks:
+  - **Result2** (Marigold): 100 .npy + 100 .png in each of `Original/` and `Mooney/`, and a `metrics.csv` with 200 rows. No NaN in any of the
+    200 .npy files (all checked, not just a sample). Shape 512x512x3, float32.
+  - **Result4** (Qwen3-VL-2B, fp32): 100 .txt in each split, and a `metrics.csv` with 200 rows. No answer is empty, and all have the `OBJECT:` tag.
+    Two odd Mooney answers: `obj00_airplane_L2` repeats the prompt template (`<one or two words>`), and `obj00_airplane_L0`
+    answers with the Chinese character 一 ("one"). Both are scored wrong, which is correct for a Mooney failure.
+- **Subset/** filled with the team's top 10 (same file names in `Subset/Original/` and `Subset/Mooney/`): obj04_bust_L0,
+  obj19_vase_L0, obj13_pumpkin_L1, obj09_helmet_L1, obj06_cup_L2, obj11_piggy_bank_L2, obj07_guitar_L3,
+  obj17_teddy_bear_L3, obj15_sofa_L4, obj14_shoe_L4. `Mooney/mooney_log.csv` still shows sigma 3, white 30, use_alpha True (all 100 rows).
+- `summarize_results.py` done. It writes to `slides_assets/` (git-ignored): `summary.csv`, `summary_by_light.csv`,
+  `summary_chart.png` and `panel_Result1..4.png`.
+  - **Windows note:** run it as `python -X utf8 summarize_results.py`. Without that, writing the CSVs fails
+    on the "ρ" in a metric name (cp1252 encoding). The script itself was not changed.
+
+### Final numbers (Original vs Mooney)
+| System | Metric | Original | Mooney |
+|---|---|---|---|
+| Depth Anything V2 | Spearman ρ (higher is better) | 0.667 | 0.166 |
+| Depth Anything V2 | AbsRel (lower is better) | 0.022 | 0.034 |
+| Marigold normals | angular error, degrees (lower is better) | 23.57 | 40.38 |
+| CLIP ViT-L/14 | top-1 / top-3 | 0.96 / 1.00 | 0.44 / 0.60 |
+| Qwen3-VL-2B | names object (strict auto check) | 0.87 | 0.19 |
+
+### Qwen answers the strict check marks wrong, but are arguably right (scores NOT changed)
+- Original, clearly right: `obj06_cup_L0..L4` "mug" (5), `obj15_sofa_L0/L1` "couch" (2), `obj04_bust_L0/L4` "statue"
+  (L0's description even says "possibly a bust") (2). That is 9 of the 13 Original misses, so the lenient score is 0.96.
+- Original, borderline: `obj11_piggy_bank_L2/L4` "pig" (it saw the pig shape, not the bank). With these too: 0.98.
+- Mooney, borderline only: `obj09_helmet_L2/L3/L4` "hat" (headgear, wrong type). With these: 0.22. Otherwise none.
+- Real misses on Original: `obj03_bottle_L0` "finger", `obj03_bottle_L2` "candle".
+
+### Next steps
+1. Team name, then `python make_submission.py --name CompVP_Part1_<TeamName>` from `tools/`. Save the md5 it prints.
+2. Upload to StudOn by 18-19 Nov (deadline 20 Nov).
