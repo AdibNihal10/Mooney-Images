@@ -275,7 +275,7 @@ def main():
     ]
     text(s, MARGIN, Inches(1.35), SW - 2 * MARGIN, Inches(1.9), bullets, size=20, spacing=1.05, after=10)
     # pipeline: render -> Mooney -> 4 models -> compare
-    eg = "obj11_piggy_bank_L2.png"
+    eg = "obj07_guitar_L0.png"
     orig_img = on_black(ROOT / "Original" / eg, BUILD / f"black_{eg}")
     steps = [("Render", "Blender, 512×512\n+ GT depth/normals", orig_img),
              ("Mooney", "blur σ=3,\n30% white", ROOT / "Mooney" / eg),
