@@ -62,14 +62,14 @@ def mean(rows, col, split, light=None):
 
 def write_summaries(data):
     OUT.mkdir(exist_ok=True)
-    with open(OUT / "summary.csv", "w", newline="") as fh:
+    with open(OUT / "summary.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(["system", "metric", "higher_is_better", "Original", "Mooney"])
         for res, name, col, label, hib in METRICS:
             if data.get(res):
                 w.writerow([name, label, hib, round(mean(data[res], col, "Original"), 3),
                             round(mean(data[res], col, "Mooney"), 3)])
-    with open(OUT / "summary_by_light.csv", "w", newline="") as fh:
+    with open(OUT / "summary_by_light.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(["system", "metric", "split"] + [f"L{k}" for k in range(5)])
         for res, name, col, label, _ in METRICS:

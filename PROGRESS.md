@@ -304,3 +304,21 @@ memory gets critical. Close Chrome, Discord and WhatsApp before any heavy local 
 ### Next steps
 1. Team name, then `python make_submission.py --name CompVP_Part1_<TeamName>` from `tools/`. Save the md5 it prints.
 2. Upload to StudOn by 18-19 Nov (deadline 20 Nov).
+
+## Update 17 Nov 2026, evening (slides + submission zip)
+- Team name: **BrotoType**. Members: Adib Bin Morshed, Mozaffar, Saimur. Names, team and course line live in
+  `slides/team.json`; edit it and rerun `python slides/build_slides.py` (or edit the text in PowerPoint).
+- `vision/summarize_results.py` now writes its CSVs with `encoding="utf-8"`, so `-X utf8` is no longer needed. Rerun OK.
+- `slides/CompVP_Part1_BrotoType.pptx` (15 slides, 16:9) built by `slides/build_slides.py` (python-pptx, git-ignored
+  like every .pptx). New assets in `slides_assets/`: `gui.png` (Gradio GUI screenshot, piggy bank, sigma 3 / 30% / alpha),
+  `code.png` (`find_threshold` + `make_mooney`, lines 98-132), `slide_build/light_chart.png` and the originals on black.
+  All slides were rendered to PNG through PowerPoint and checked; two layout problems were fixed (slide 7 number wrapping,
+  slide 11 axis labels). Slide 15 (AI usage declaration) is still a placeholder for the team to write.
+  Course name on slide 1 is "Computational Visual Perception (CompVP)"; check it, it's in `team.json`.
+- Submission zip: `CompVP_Part1_BrotoType.zip` in the project root, 54.0 MB, 1020 files, all checks passed (100/100/10/10,
+  every Result folder complete), `testzip` OK.
+  **md5: `74e68b8c35fa07061819688d6193a283`**
+
+### Next steps
+1. Write the AI usage declaration on slide 15.
+2. Upload the zip (and slides, if required) to StudOn by 18-19 Nov. If the upload fails, send the md5 above before 20 Nov.
