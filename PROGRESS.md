@@ -317,7 +317,7 @@ memory gets critical. Close Chrome, Discord and WhatsApp before any heavy local 
   Course name on slide 1 is "Computational Visual Perception (CompVP)"; check it, it's in `team.json`.
 - Submission zip: `CompVP_Part1_BrotoType.zip` in the project root, 54.0 MB, 1020 files, all checks passed (100/100/10/10,
   every Result folder complete), `testzip` OK.
-  **md5: `8087f289181efcd00bb4ba09242999e3`** (rebuilt 18 Nov after the Subset change below; the 17 Nov zip had `74e68b8c35fa07061819688d6193a283`)
+  **md5: `fc4fc76e3ae0179038bacdfd157cdb6d`** (current zip, rebuilt 18 Nov after the second Subset fix below; superseded: `74e68b8c35fa07061819688d6193a283` on 17 Nov, `8087f289181efcd00bb4ba09242999e3` earlier on 18 Nov)
 
 ### Next steps
 1. Write the AI usage declaration on slide 15.
@@ -334,4 +334,14 @@ memory gets critical. Close Chrome, Discord and WhatsApp before any heavy local 
   only the pictures and captions were swapped. **Rerunning `build_slides.py` would drop the WPS edits.** All 15 slides were rendered through
   PowerPoint and checked: no overflow or overlaps. No other slide showed or named a replaced image.
 - Zip rebuilt: `CompVP_Part1_BrotoType.zip`, 54.0 MB, 1020 files, all checks passed, `testzip` OK.
-  **md5: `8087f289181efcd00bb4ba09242999e3`**
+  md5 of that zip: `8087f289181efcd00bb4ba09242999e3` (**superseded**, see the next update).
+
+## Update 18 Nov 2026, later (Subset fix: teddy duplicate removed)
+- Correction from the team: obj17_teddy_bear_L2 → obj17_teddy_bear_L0 and obj17_teddy_bear_L0 → obj15_sofa_L0. Net effect:
+  teddy_bear_L2 is out and sofa_L0 is in. No object appears twice any more.
+- **Final Subset/** (identical in `Subset/Original/` and `Subset/Mooney/`): obj04_bust_L1, obj05_chair_L0, obj07_guitar_L3, obj09_helmet_L1,
+  obj11_piggy_bank_L2, obj13_pumpkin_L1, obj14_shoe_L4, obj15_sofa_L0, obj17_teddy_bear_L0, obj19_vase_L0.
+- Panels rerun. The deck was patched in place again (slides 3/4 and 6-9), and the unused replaced images were removed from the .pptx (3.1 MB).
+  All 15 slides were rendered and checked: no overflow or overlaps.
+- Zip rebuilt: 53.9 MB, 1020 files, all checks passed, `testzip` OK.
+  **md5: `fc4fc76e3ae0179038bacdfd157cdb6d`** (this is the one to submit)
