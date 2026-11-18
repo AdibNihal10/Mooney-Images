@@ -1,6 +1,6 @@
 # CompVP Part 1: progress
 
-Last updated: 16 Nov 2026, evening
+Last updated: 18 Nov 2026, evening
 Deadline: 20 Nov; upload to StudOn at the university by 18-19 Nov.
 
 ## Done
@@ -317,8 +317,21 @@ memory gets critical. Close Chrome, Discord and WhatsApp before any heavy local 
   Course name on slide 1 is "Computational Visual Perception (CompVP)"; check it, it's in `team.json`.
 - Submission zip: `CompVP_Part1_BrotoType.zip` in the project root, 54.0 MB, 1020 files, all checks passed (100/100/10/10,
   every Result folder complete), `testzip` OK.
-  **md5: `74e68b8c35fa07061819688d6193a283`**
+  **md5: `8087f289181efcd00bb4ba09242999e3`** (rebuilt 18 Nov after the Subset change below; the 17 Nov zip had `74e68b8c35fa07061819688d6193a283`)
 
 ### Next steps
 1. Write the AI usage declaration on slide 15.
 2. Upload the zip (and slides, if required) to StudOn by 18-19 Nov. If the upload fails, send the md5 above before 20 Nov.
+
+## Update 18 Nov 2026, evening (Subset changed)
+- Team changed 4 of the top 10 (OLD → NEW): obj04_bust_L0 → obj05_chair_L0, obj06_cup_L2 → obj04_bust_L1,
+  obj17_teddy_bear_L3 → obj17_teddy_bear_L2, obj15_sofa_L4 → obj17_teddy_bear_L0.
+- **Subset/** now (same names, byte-identical copies in `Subset/Original/` and `Subset/Mooney/`): obj04_bust_L1, obj05_chair_L0,
+  obj07_guitar_L3, obj09_helmet_L1, obj11_piggy_bank_L2, obj13_pumpkin_L1, obj14_shoe_L4, obj17_teddy_bear_L0,
+  obj17_teddy_bear_L2, obj19_vase_L0. Note: teddy_bear appears twice (L0 and L2), which the team chose.
+- `summarize_results.py` rerun, so `panel_Result1..4.png` show the new 10. The summary numbers are unchanged (they use all 100 images).
+- Deck: the team had edited it in WPS (slide 1 now has student IDs), so it was **patched in place**, not rebuilt. On slides 3/4 and 6-9
+  only the pictures and captions were swapped. **Rerunning `build_slides.py` would drop the WPS edits.** All 15 slides were rendered through
+  PowerPoint and checked: no overflow or overlaps. No other slide showed or named a replaced image.
+- Zip rebuilt: `CompVP_Part1_BrotoType.zip`, 54.0 MB, 1020 files, all checks passed, `testzip` OK.
+  **md5: `8087f289181efcd00bb4ba09242999e3`**
